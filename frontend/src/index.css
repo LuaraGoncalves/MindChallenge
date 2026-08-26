@@ -1,0 +1,167 @@
+@import "tailwindcss";
+
+:root {
+  --ink: #1f2120;
+  --panel: #2b3129;
+  --panel-soft: #343c31;
+  --cream: #eeecd0;
+  --muted: #9fa88f;
+  --acid: #d9e074;
+  --coin: #f2b84b;
+  --signal: #76d68a;
+  --danger: #ef7d4f;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  min-height: 100vh;
+  min-width: 100vw;
+  background-color: var(--ink);
+  color: white;
+  font-family: "Trebuchet MS", "Arial Black", system-ui, sans-serif;
+}
+
+button {
+  font: inherit;
+}
+
+.pixel-font {
+  font-family: "Courier New", "Lucida Console", monospace;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.arcade-shell {
+  background:
+    repeating-linear-gradient(135deg, rgba(238, 236, 208, 0.025) 0 2px, transparent 2px 14px),
+    radial-gradient(circle at 50% 18%, rgba(217, 224, 116, 0.16), transparent 28rem),
+    linear-gradient(180deg, #272a27 0%, #1f2120 48%, #191b1a 100%);
+  background-size: auto;
+}
+
+.scanlines::after {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  content: "";
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.04) 0,
+    rgba(255, 255, 255, 0.04) 1px,
+    transparent 1px,
+    transparent 5px
+  );
+  mix-blend-mode: overlay;
+}
+
+.pixel-title {
+  color: var(--cream);
+  text-shadow:
+    0 4px 0 #101211,
+    0 0 18px rgba(217, 224, 116, 0.34),
+    5px 0 0 rgba(118, 214, 138, 0.18),
+    -5px 0 0 rgba(239, 125, 79, 0.16);
+}
+
+.arcade-panel {
+  border: 1px solid rgba(238, 236, 208, 0.22);
+  background:
+    linear-gradient(135deg, rgba(238, 236, 208, 0.08), transparent 38%),
+    linear-gradient(180deg, rgba(46, 54, 43, 0.96), rgba(24, 28, 24, 0.98));
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 18px 60px rgba(0, 0, 0, 0.36);
+}
+
+.arcade-frame {
+  border: 2px solid rgba(238, 236, 208, 0.72);
+  box-shadow:
+    0 0 0 4px rgba(31, 33, 32, 0.9),
+    0 0 0 5px rgba(238, 236, 208, 0.2),
+    0 24px 70px rgba(0, 0, 0, 0.45);
+}
+
+.coin-button {
+  border: 1px solid rgba(238, 236, 208, 0.9);
+  background: linear-gradient(180deg, #f7f3d6, #d7d3a6);
+  color: #1f2120;
+  box-shadow: 0 5px 0 #8a7a45, 0 16px 30px rgba(242, 184, 75, 0.25);
+}
+
+.coin-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 0 #8a7a45, 0 22px 40px rgba(242, 184, 75, 0.34);
+}
+
+.game-card,
+.extra-card,
+.pixel-tile,
+.arcade-glow {
+  animation: floaty 5s ease-in-out infinite;
+}
+
+.game-card:nth-child(2),
+.extra-card:nth-child(2n),
+.pixel-tile:nth-child(2n) {
+  animation-delay: -1.8s;
+}
+
+.marquee-track {
+  animation: marquee 18s linear infinite;
+}
+
+.spark {
+  animation: spark-drift 4s ease-in-out infinite;
+}
+
+.pulse-light {
+  animation: pulse-light 2.4s ease-in-out infinite;
+}
+
+@keyframes floaty {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes spark-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.35;
+  }
+
+  50% {
+    transform: translate3d(14px, -18px, 0) scale(1.25);
+    opacity: 0.9;
+  }
+}
+
+@keyframes pulse-light {
+  0%,
+  100% {
+    opacity: 0.45;
+    filter: saturate(0.8);
+  }
+
+  50% {
+    opacity: 1;
+    filter: saturate(1.4);
+  }
+}
