@@ -1,7 +1,14 @@
 node_modules/
 dist/
 target/
+*.log
+.env
+.env.local
+.env.*
+logs/
 
 frontend/node_modules/
 frontend/dist/
 backend/target/
+
+!**/.env.example
