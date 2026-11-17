@@ -9,6 +9,7 @@ type CatalogState = {
 
 export function useGameCatalog() {
   const [state, setState] = useState<CatalogState>({ loading: true });
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
     let active = true;
@@ -31,7 +32,12 @@ export function useGameCatalog() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [attempt]);
 
-  return state;
+  function retry() {
+    setState({ loading: true });
+    setAttempt((value) => value + 1);
+  }
+
+  return { ...state, retry };
 }

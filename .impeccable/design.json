@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-17T00:00:00-03:00",
+  "title": "Design System: MindChallenge",
+  "extensions": {
+    "shadows": [{"name":"paper","value":"2px 9px 15px #170b0866","purpose":"Profundidade de papel e tecido sobre madeira."}],
+    "motion": [
+      {"name":"interaction","value":"200ms ease","purpose":"Resposta a hover e mudança de estado."},
+      {"name":"ribbon","value":"6s ease-in-out infinite","purpose":"Oscilação das fitas, respeitando pausa e movimento reduzido."},
+      {"name":"paper-arrival","value":"850ms power3.out","purpose":"Entrada do pergaminho com GSAP."},
+      {"name":"react-transition","value":"280ms cubic-bezier(0.16, 1, 0.3, 1)","purpose":"Motion: catálogo, reorganização e bilhetes; duração zero quando pausado ou com movimento reduzido."},
+      {"name":"filter-highlight","value":"250ms cubic-bezier(0.16, 1, 0.3, 1)","purpose":"Deslocamento do destaque da categoria selecionada."},
+      {"name":"dialog-exit","value":"170ms cubic-bezier(0.16, 1, 0.3, 1)","purpose":"Fechamento antes de remover o diálogo nativo e devolver o foco."}
+    ],
+    "breakpoints": [{"name":"tablet","value":"900px"},{"name":"mobile","value":"600px"}]
+  },
+  "components": [
+    {"name":"Ação principal","kind":"button","refersTo":"button-primary","description":"Botão vermelho com resposta tátil.","html":"<button class=\"ds-action\">Explorar desafios</button>","css":".ds-action{font:700 16px sans-serif;color:#fff1d7;background:#a54137;border:0;border-radius:2px;padding:10px 25px;transition:transform .2s,background .2s}.ds-action:hover{background:#8c342d;transform:translateY(-3px) rotate(-1deg)}.ds-action:focus-visible{outline:3px solid #f4c951;outline-offset:5px}.ds-action:active{transform:translateY(1px)}"},
+    {"name":"Filtro de categoria","kind":"chip","description":"Seleção de categoria com estado pressionado.","html":"<button class=\"ds-filter\" aria-pressed=\"true\">Modo Kids</button>","css":".ds-filter{padding:9px 17px;border:0;border-radius:2px;color:#e4c79e;background:#1e1512;cursor:pointer}.ds-filter[aria-pressed=true]{background:#e8cea0;color:#4b3428}.ds-filter:hover{box-shadow:1px 2px 4px #140d0b55}.ds-filter:focus-visible{outline:3px solid #f4c951;outline-offset:5px}"},
+    {"name":"Etiqueta de demonstração","kind":"custom","description":"Etiqueta de tecido verde-petróleo.","html":"<span class=\"ds-label\">Demo Phaser</span>","css":".ds-label{display:inline-block;padding:5px 14px;font:12px sans-serif;background:#246d68;color:#f9e7bc;border-radius:2px}"}
+  ],
+  "narrative": {
+    "northStar": "Mural de aventuras",
+    "overview": "As referências fornecidas pelo usuário orientam a madeira pintada, os papéis gastos, os selos e as fitas coloridas. Texto e controles são HTML; as ilustrações servem como materiais de fundo. A interface continua sendo um catálogo de um projeto em desenvolvimento.",
+    "keyCharacteristics": ["Madeira e pergaminho ilustrados","Fitas coloridas","Movimento controlável"],
+    "rules": [],
+    "dos": ["Use os materiais e fontes locais para manter a identidade entre telas.","Mantenha os textos escuros nos pergaminhos e claros sobre madeira e tecidos.","Preserve foco por teclado, estados de erro e preferência de movimento reduzido."],
+    "donts": ["Não transforme funcionalidades planejadas em promessas de jogos prontos."]
+  }
+}
