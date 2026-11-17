@@ -1,15 +1,19 @@
 # MindChallenge Frontend
 
-Interface web da plataforma MindChallenge, feita com React, TypeScript, Vite, Tailwind CSS, GSAP e Phaser.
+Interface web da plataforma MindChallenge, feita com React, TypeScript, Vite, Tailwind CSS, GSAP, Motion e Phaser.
 
 ## O que existe hoje
 
-- Uma landing page do MindChallenge.
-- Cards de categorias de jogos mentais.
+- Um mural de aventuras com texturas de madeira e pergaminho.
+- Categorias de jogos mentais com filtros e detalhes de cada desafio.
+- Animações de entrada, fitas em movimento e interações com opção de pausa e suporte a movimento reduzido.
+- Motion anima filtros, reorganização dos pergaminhos, detalhes dos desafios e bilhetes dos modos extras. GSAP mantém a sequência de abertura e Phaser mantém a demonstração.
 - Uma demonstração interativa em Phaser.
 - Catálogo carregado da API pelos endpoints `/api/games/groups` e `/api/games/extras`.
 
 O acesso HTTP fica em `src/api/gameCatalog.ts`, e o hook `src/hooks/useGameCatalog.ts` gerencia o carregamento. O componente `MemoryGame` ainda é uma demonstração: não implementa partidas de memória nem envio de pontuações.
+
+As imagens ficam em `public/assets`, com seus prompts de geração documentados no README da pasta. As fontes locais e suas licenças ficam em `public/fonts`. As decisões visuais estão no [guia de design](../DESIGN.md).
 
 ## Como rodar
 

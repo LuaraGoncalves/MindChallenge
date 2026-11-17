@@ -1,10 +1,10 @@
 # MindChallenge
 
-MindChallenge é um projeto de plataforma de jogos mentais com visual arcade, em desenvolvimento, feito com React e Spring Boot.
+MindChallenge é um projeto de plataforma de jogos mentais com visual de tabuleiro e mural de aventuras, em desenvolvimento, feito com React e Spring Boot.
 
 ## Estado do projeto
 
-- Implementado: interface arcade, catálogo fornecido pela API, demonstração interativa em Phaser e endpoints de ranking.
+- Implementado: mural de desafios com filtros e detalhes dos jogos, catálogo fornecido pela API, demonstração interativa em Phaser e endpoints de ranking.
 - Preparado no código: persistência com JPA/Flyway, PostgreSQL no Docker Compose e workflow de validação no GitHub Actions.
 - Pendente: jogos completos, integração do placar com o frontend e validação de partidas para evitar pontuações inventadas.
 - A configuração Docker ainda precisa ser validada com os três serviços funcionando juntos. A existência dos arquivos não comprova um deploy concluído.
@@ -17,7 +17,7 @@ MindChallenge é um projeto de plataforma de jogos mentais com visual arcade, em
 
 ## Tecnologias
 
-- React, TypeScript, Vite, Tailwind CSS, GSAP e Phaser
+- React, TypeScript, Vite, Tailwind CSS, GSAP, Motion e Phaser
 - Java 17, Spring Boot, Spring Data JPA, Flyway e PostgreSQL
 - Docker, Docker Compose e GitHub Actions
 

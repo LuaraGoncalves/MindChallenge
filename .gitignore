@@ -12,3 +12,6 @@ frontend/dist/
 backend/target/
 
 !**/.env.example
+
+# Local visual verification artifacts
+.impeccable/review/
