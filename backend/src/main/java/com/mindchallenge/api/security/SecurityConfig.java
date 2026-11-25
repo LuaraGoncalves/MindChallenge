@@ -5,7 +5,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.http.HttpMethod;
@@ -20,12 +22,16 @@ public class SecurityConfig {
 	@Bean
 	PasswordEncoder passwordEncoder() { return new BCryptPasswordEncoder(12); }
 	@Bean
-	AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-		return configuration.getAuthenticationManager();
+	AuthenticationManager authenticationManager(UserDetailsService users, PasswordEncoder encoder) {
+		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+		provider.setUserDetailsService(users);
+		provider.setPasswordEncoder(encoder);
+		return new ProviderManager(provider);
 	}
 	@Bean
-	SecurityFilterChain security(HttpSecurity http) throws Exception {
+	SecurityFilterChain security(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
 		http.cors(cors -> {})
+			.authenticationManager(authenticationManager)
 			.csrf(csrf -> csrf.csrfTokenRepository(new HttpSessionCsrfTokenRepository())
 				.csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()))
 			.requestCache(cache -> cache.requestCache(new NullRequestCache()))
