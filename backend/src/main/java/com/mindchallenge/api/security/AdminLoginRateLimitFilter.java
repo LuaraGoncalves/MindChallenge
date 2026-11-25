@@ -15,7 +15,9 @@ public class AdminLoginRateLimitFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws ServletException, IOException {
-		if (!request.getRequestURI().equals(request.getContextPath() + "/api/admin/login") || !request.getMethod().equals("POST")) {
+		String path = request.getRequestURI().substring(request.getContextPath().length());
+		boolean login = path.equals("/api/admin/login") || path.equals("/api/auth/login") || path.equals("/api/auth/register");
+		if (!login || !request.getMethod().equals("POST")) {
 			chain.doFilter(request, response); return;
 		}
 		long now = System.currentTimeMillis();

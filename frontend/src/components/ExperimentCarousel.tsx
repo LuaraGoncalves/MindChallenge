@@ -59,7 +59,7 @@ export function ExperimentCarousel({ motionEnabled }: { motionEnabled: boolean }
       onDragEnd={(_, info) => { if (info.offset.x < -55) move(1); else if (info.offset.x > 55) move(-1); }}>
       {demos.map((demo, index) => { const Icon = demo.icon; return <motion.article className={`experiment-card${index === active ? ' is-current' : ''}`} key={demo.scene}
         whileTap={animate ? { scale: .96, rotateY: index % 2 ? -2 : 2, y: -5 } : { scale: .99 }}
-        onClick={() => { setActive(index); setCardTouches((touches) => demos.map((_, i) => i === index ? (touches[i] ?? 0) + 1 : touches[i] ?? 0)); }}>
+        onTap={() => { setActive(index); setCardTouches((touches) => demos.map((_, i) => i === index ? (touches[i] ?? 0) + 1 : touches[i] ?? 0)); }}>
         <div className="experiment-card-heading"><span><Icon size={18} /></span><small>EXPERIMENTO 0{index + 1}</small></div>
         {demo.scene === 'memory' ? <div className="experiment-real-demo"><Suspense fallback={<div className="game-loading" role="status">Preparando a demonstração…</div>}><MemoryGame motionEnabled={animate} /></Suspense></div> : <AnimatedScene scene={demo.scene} animate={animate} pulse={cardTouches[index] ?? 0} />}
         <h3>{demo.title}</h3><p>{demo.description}</p>
