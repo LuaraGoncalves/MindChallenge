@@ -8,8 +8,9 @@ Interface web da plataforma MindChallenge, feita com React, TypeScript, Vite, Ta
 - Painel `/admin` com login, cadastro de temas e personagens, upload de PNG/JPEG e ativação dos itens publicados no jogo. As credenciais ficam apenas no backend; veja o [guia de administração](../docs/ADMIN.md).
 - Categorias de jogos mentais com filtros e detalhes de cada desafio.
 - Animações de entrada, fitas em movimento e interações com opção de pausa e suporte a movimento reduzido.
-- Motion anima filtros, reorganização dos pergaminhos, detalhes dos desafios e bilhetes dos modos extras. GSAP mantém a sequência de abertura e Phaser mantém a demonstração.
-- Uma demonstração interativa em Phaser.
+- Motion anima filtros, reorganização dos pergaminhos, detalhes dos desafios, bilhetes dos modos extras e o carrossel arrastável da Mesa de experimentos. GSAP mantém a sequência de abertura e Phaser mantém a demonstração interativa.
+- A Mesa de experimentos apresenta prévias animadas com profundidade 3D e uma demonstração Phaser interativa; pode ser navegada arrastando com mouse/toque ou pelas setas. Os movimentos respeitam a opção de pausa e a preferência do sistema por movimento reduzido.
+- Vídeos reais ainda não acompanham o repositório. Para incluí-los, salve os clipes otimizados em `public/videos` e conecte os arquivos às demonstrações do carrossel.
 - Jogo da memória com personagens Pokémon, três dificuldades (6, 8 e 12 pares), tentativas, tempo, pausa, reinício e pontuação ao concluir.
 - Catálogo carregado da API pelos endpoints `/api/games/groups` e `/api/games/extras`.
 

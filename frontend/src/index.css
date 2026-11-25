@@ -119,6 +119,33 @@ h1 { font-family: 'Pirata One', serif; font-size: 80px; font-weight: 400; line-h
 .demo-section { padding-block: 48px 60px; }
 .section-intro { margin-top: 13px; margin-bottom: 24px; color: #e0bf94; font-size: 15px; }
 .cloth-label { padding: 5px 14px; font-size: 12px; background: #246d68; color: #f9e7bc; border-radius: 2px; white-space: nowrap; }
+.experiment-controls { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 14px; color: #e0bf94; font-size: 13px; }
+.experiment-controls > div { display: flex; gap: 8px; }
+.experiment-controls button:disabled { opacity: .4; cursor: default; }
+.experiment-track { display: flex; gap: 18px; overflow-x: auto; padding: 8px 5px 20px; cursor: grab; touch-action: pan-y; scrollbar-width: thin; scrollbar-color: #936444 #2c1d19; }
+.experiment-track:active { cursor: grabbing; }
+.experiment-card { flex: 0 0 min(320px, 80vw); min-width: 0; padding: 14px; color: #493226; background: #f3dfba url('/assets/parchment.png') center / 100% 100%; border: 3px solid #93613e; box-shadow: var(--shadow); user-select: none; perspective: 700px; transition: transform .2s, border-color .2s; }
+.experiment-card.is-current { border-color: #d3ab57; transform: translateY(-4px); }
+.experiment-card-heading { display: flex; align-items: center; gap: 9px; margin-bottom: 12px; color: #755740; }
+.experiment-card-heading > span { display: grid; place-items: center; width: 32px; height: 32px; color: #f3dfba; background: #246d68; border-radius: 50%; }
+.experiment-card-heading small { font-size: 10px; letter-spacing: .08em; }
+.experiment-card h3 { margin-top: 12px; font-family: 'Pirata One', serif; font-size: 25px; font-weight: 400; }
+.experiment-card > p { min-height: 23px; color: #755740; font-size: 13px; }
+.experiment-real-demo { position: relative; overflow: hidden; }
+.experiment-real-demo .phaser-frame { aspect-ratio: 1.7 / 1; border-width: 5px; }
+.experiment-real-demo .phaser-frame canvas { width: 100% !important; height: 100% !important; object-fit: contain; }
+.experiment-real-demo .reset-demo { top: 10px; right: 10px; width: 32px; height: 32px; }
+.experiment-memory, .experiment-shapes, .experiment-puzzle, .experiment-colors { height: 165px; display: flex; align-items: center; justify-content: center; gap: 12px; overflow: hidden; color: #f3dfba; background: #233b35; border: 5px solid #93613e; }
+.experiment-memory span { display: grid; place-items: center; width: 54px; height: 72px; color: #f3dfba; background: linear-gradient(145deg, #31766e, #194b46); border: 2px solid #d3ab57; border-radius: 5px; box-shadow: 3px 6px 8px #100a0850; backface-visibility: hidden; transform-style: preserve-3d; }
+.experiment-shapes span { color: #d3ab57; filter: drop-shadow(3px 6px 2px #100a0870); transform-style: preserve-3d; }
+.experiment-shapes span:nth-child(2) { color: #a3c1a0; }
+.experiment-shapes span:nth-child(3) { color: #e8c1a0; }
+.experiment-puzzle { display: grid; grid-template-columns: repeat(2, 54px); grid-template-rows: repeat(2, 54px); gap: 0; }
+.experiment-puzzle span { display: grid; place-items: center; color: #f3dfba; background: linear-gradient(145deg, #31766e, #194b46); border: 1px solid #d3ab57; box-shadow: 2px 4px 5px #100a0860; transform-style: preserve-3d; }
+.experiment-colors span { width: 45px; height: 70px; border: 2px solid #f3dfba; border-radius: 24px 24px 8px 8px; }
+.experiment-dots { display: flex; justify-content: center; gap: 9px; padding-top: 3px; }
+.experiment-dots button { width: 10px; height: 10px; padding: 0; border: 0; border-radius: 50%; background: #b99165; }
+.experiment-dots button.active { width: 27px; border-radius: 8px; background: #d3ab57; }
 .phaser-frame { position: relative; width: 100%; aspect-ratio: 2 / 1; border: 9px solid #93613e; outline: 2px solid #311c14; box-shadow: inset 0 2px 4px #100a08, var(--shadow); background: #233b35; overflow: hidden; }
 .phaser-frame canvas { display: block; max-width: 100%; }
 .demo-tool { position: relative; }
@@ -270,6 +297,8 @@ h1 { font-family: 'Pirata One', serif; font-size: 80px; font-weight: 400; line-h
   .demo-section .cloth-label { margin-left: 35px; }
   .demo-section .section-rule { display: none; }
   .phaser-frame { border-width: 5px; }
+  .experiment-card { flex-basis: min(300px, 84vw); }
+  .experiment-memory, .experiment-shapes, .experiment-puzzle, .experiment-colors { height: 145px; }
   .section-intro { font-size: 13px; }
   .site-footer { gap: 15px; }
 }
