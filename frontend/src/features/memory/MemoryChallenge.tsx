@@ -1,13 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
+import type { FormEvent } from 'react';
 import { useMachine } from '@xstate/react';
 import { motion } from 'motion/react';
 import Phaser from 'phaser';
-import { ArrowLeft, Brain, Check, Clock3, Layers, LoaderCircle, Pause, Play, RotateCcw, Trophy } from 'lucide-react';
+import { ArrowLeft, Brain, Check, Clock3, Layers, LoaderCircle, Pause, Play, RotateCcw, Trophy, X, Sparkles, Medal, Heart } from 'lucide-react';
 import { getMemoryCharacters } from '../../api/pokemon';
 import { getCatalogCharacters, getMemoryThemes } from '../../api/memoryCatalog';
 import type { MemoryCharacter, MemoryTheme } from '../../api/memoryCatalog';
 import { memoryMachine, memoryScore } from './memoryMachine';
 import type { MemoryCard } from './memoryMachine';
+import { rankingApi, saveLocalScore } from '../../api/ranking';
+import type { RankingEntry } from '../../api/ranking';
 
 function makeCards(characters: MemoryCharacter[]): MemoryCard[] {
   return Phaser.Utils.Array.Shuffle(characters.flatMap((character) => [
@@ -17,6 +20,16 @@ function makeCards(characters: MemoryCharacter[]): MemoryCard[] {
 
 function formatTime(seconds: number) {
   return `${Math.floor(seconds / 60).toString().padStart(2, '0')}:${(seconds % 60).toString().padStart(2, '0')}`;
+}
+
+function victoryMessage(attempts: number, pairs: number) {
+  if (attempts <= pairs) return { title: 'PERFEITO!', message: 'Uma partida impecável! Você encontrou todos os pares de primeira.', icon: Sparkles, style: 'perfect' };
+  if (attempts <= Math.ceil(pairs * 1.5)) return { title: 'EXCELENTE!', message: 'Sua memória está afiada. Mandou muito bem nessa aventura!', icon: Medal, style: 'excellent' };
+  return { title: 'UFA, PARABÉNS!', message: 'O importante é não desistir. Você venceu e reuniu todos os pares!', icon: Heart, style: 'phew' };
+}
+
+function getSavedPlayerName() {
+  try { return localStorage.getItem('mindchallenge:player-name') ?? ''; } catch { return ''; }
 }
 
 function MemoryBoard({ characters, canAnimate }: { characters: MemoryCharacter[]; canAnimate: boolean }) {
@@ -29,6 +42,15 @@ function MemoryBoard({ characters, canAnimate }: { characters: MemoryCharacter[]
   const locked = paused || won || state.matches({ playing: 'mismatch' });
   const pairs = characters.length;
   const score = memoryScore(attempts, seconds, pairs);
+  const [playerName, setPlayerName] = useState(getSavedPlayerName);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [ranking, setRanking] = useState<RankingEntry[]>([]);
+  const [rankingLoading, setRankingLoading] = useState(false);
+  const scoreStoredRef = useRef(false);
+  const winner = victoryMessage(attempts, pairs);
+  const WinnerIcon = winner.icon;
 
   useEffect(() => {
     if (!playing || !state.context.started) return;
@@ -41,6 +63,43 @@ function MemoryBoard({ characters, canAnimate }: { characters: MemoryCharacter[]
     document.addEventListener('visibilitychange', onVisibility);
     return () => document.removeEventListener('visibilitychange', onVisibility);
   }, [send]);
+
+  useEffect(() => {
+    if (!won) {
+      scoreStoredRef.current = false;
+      return;
+    }
+    if (!scoreStoredRef.current) {
+      let savedName = 'Jogador';
+      try { savedName = localStorage.getItem('mindchallenge:player-name') || savedName; } catch { /* Nome padrão quando o armazenamento estiver bloqueado. */ }
+      saveLocalScore({ playerName: savedName, gameSlug: 'memory-kids', score });
+      scoreStoredRef.current = true;
+    }
+    setRankingLoading(true);
+    rankingApi.top().then(setRanking).catch(() => setRanking([])).finally(() => setRankingLoading(false));
+  }, [won, score]);
+
+  async function submitScore(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const cleanName = playerName.trim();
+    if (!cleanName || submitting || submitted) return;
+    setSubmitting(true);
+    setSubmitError('');
+    try {
+      localStorage.setItem('mindchallenge:player-name', cleanName);
+      await rankingApi.submit(cleanName, score);
+      setSubmitted(true);
+      setRanking(await rankingApi.top());
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : 'Falha ao enviar sua pontuação.');
+    } finally { setSubmitting(false); }
+  }
+
+  function restart() {
+    setSubmitted(false);
+    setSubmitError('');
+    send({ type: 'RESTART', cards: makeCards(characters) });
+  }
 
   return (
     <>
@@ -82,9 +141,27 @@ function MemoryBoard({ characters, canAnimate }: { characters: MemoryCharacter[]
         </div>
         {paused && <div className="memory-pause"><Pause size={30} /><h3>Uma pausa na aventura</h3><button className="ribbon-button" onClick={() => send({ type: 'RESUME' })}><Play size={17} />Continuar</button></div>}
       </div>
-      {won && <motion.div className="memory-victory" role="status" initial={{ opacity: 0, y: canAnimate ? 12 : 0 }} animate={{ opacity: 1, y: 0 }}>
-        <Trophy size={32} /><div><h3>Todos os pares reunidos!</h3><p>{score} pontos · {attempts} tentativas · {formatTime(seconds)}</p></div>
-        <button className="ribbon-button" onClick={() => send({ type: 'RESTART', cards: makeCards(characters) })}><RotateCcw size={16} />Jogar de novo</button>
+      {won && <motion.div className={`victory-backdrop victory-${winner.style}`} role="dialog" aria-modal="true" aria-labelledby="victory-title"
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+        <motion.section className="victory-modal" initial={{ opacity: 0, scale: canAnimate ? .72 : 1, y: canAnimate ? 35 : 0, rotate: canAnimate ? -2 : 0 }}
+          animate={{ opacity: 1, scale: 1, y: 0, rotate: 0 }} transition={{ type: 'spring', stiffness: 220, damping: 18 }}>
+          <button className="victory-close icon-button" aria-label="Fechar resultado" onClick={restart}><X size={19} /></button>
+          <div className="victory-burst" aria-hidden="true"><span /><span /><span /><span /><span /><span /></div>
+          <div className="victory-emblem"><WinnerIcon size={35} /></div>
+          <span className="victory-kicker">AVENTURA CONCLUÍDA</span>
+          <h3 id="victory-title">{winner.title}</h3>
+          <p className="victory-copy">{winner.message}</p>
+          <div className="victory-stats"><span><Trophy size={17} />{score} pontos</span><span><Brain size={17} />{attempts} tentativas</span><span><Clock3 size={17} />{formatTime(seconds)}</span></div>
+          <form className="victory-score-form" onSubmit={submitScore}>
+            <label htmlFor="ranking-player-name">Seu nome no placar</label>
+            <div><input id="ranking-player-name" value={playerName} onChange={(event) => setPlayerName(event.target.value)} maxLength={40} required placeholder="Como quer aparecer?" disabled={submitted} />
+              <button className="ribbon-button" type="submit" disabled={submitting || submitted}>{submitted ? 'Pontuação enviada!' : submitting ? 'Enviando…' : 'Salvar no placar'}</button></div>
+            {submitError && <p className="ranking-error" role="alert">{submitError} Sua pontuação continua salva neste navegador.</p>}
+            {submitted && <p className="ranking-success" role="status">Seu resultado entrou no ranking online!</p>}
+          </form>
+          <div className="victory-leaderboard"><h4>Melhores aventureiros</h4>{rankingLoading ? <p role="status">Carregando placar…</p> : ranking.length ? <ol>{ranking.slice(0, 5).map((entry, index) => <li key={entry.id}><span>{index + 1}. {entry.playerName}</span><strong>{entry.score}</strong></li>)}</ol> : <p>O placar online aparecerá aqui quando estiver disponível.</p>}</div>
+          <button className="victory-replay" onClick={restart}><RotateCcw size={16} />Jogar novamente</button>
+        </motion.section>
       </motion.div>}
     </>
   );
@@ -135,6 +212,6 @@ export default function MemoryChallenge({ canAnimate, onClose }: { canAnimate: b
         <div className="memory-message" role="alert"><p>{result.error}</p><button className="ribbon-button" onClick={() => newGame()}>Tentar novamente</button></div> :
         <div className="memory-message" role="status"><LoaderCircle className="loading-compass" size={30} /><p>Reunindo os personagens…</p></div>}
     </div>
-    <p className="memory-credits">{theme === 'pokemon' ? <>Personagens e imagens via <a href="https://pokeapi.co/" target="_blank" rel="noreferrer">PokéAPI</a>. Pokémon pertence aos seus respectivos titulares. </> : <>Coleção {themes.find(item => item.id === theme)?.name}, cadastrada no MindChallenge. </>}Pontuação desta partida, sem envio ao ranking online.</p>
+    <p className="memory-credits">{theme === 'pokemon' ? <>Personagens e imagens via <a href="https://pokeapi.co/" target="_blank" rel="noreferrer">PokéAPI</a>. Pokémon pertence aos seus respectivos titulares. </> : <>Coleção {themes.find(item => item.id === theme)?.name}, cadastrada no MindChallenge. </>}Ao vencer, salve seu resultado no placar online.</p>
   </section>;
 }

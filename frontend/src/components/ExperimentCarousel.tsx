@@ -1,4 +1,4 @@
-import { lazy, Suspense, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
 import { ArrowLeft, ArrowRight, FlaskConical, Layers, Palette, Puzzle, Shapes, Sparkles } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
@@ -13,10 +13,16 @@ const demos: Demo[] = [
   { title: 'Sequência de cores', description: 'Uma sequência brilhante para observar.', icon: Palette, scene: 'colors' },
 ];
 
-function AnimatedScene({ scene, animate }: { scene: Demo['scene']; animate: boolean }) {
+function AnimatedScene({ scene, animate, pulse = 0 }: { scene: Demo['scene']; animate: boolean; pulse?: number }) {
   const [touched, setTouched] = useState<number[]>([]);
   const transition = animate ? { duration: 1.8, repeat: Infinity, repeatType: 'mirror' as const, ease: 'easeInOut' as const } : { duration: 0 };
   const toggle = (index: number) => setTouched((items) => items.includes(index) ? items.filter((item) => item !== index) : [...items, index]);
+  useEffect(() => {
+    if (pulse > 0) {
+      const index = (pulse - 1) % 4;
+      setTouched((items) => items.includes(index) ? items.filter((item) => item !== index) : [...items, index]);
+    }
+  }, [pulse]);
   const interaction = (index: number, label: string) => ({ type: 'button' as const, 'aria-label': label, 'aria-pressed': touched.includes(index), onPointerDown: (event: React.PointerEvent) => event.stopPropagation(), onClick: (event: React.MouseEvent) => { event.stopPropagation(); toggle(index); } });
   if (scene === 'memory') return <div className="experiment-memory">{[0, 1, 2, 3].map((item) =>
     <motion.button {...interaction(item, `Virar carta ${item + 1}`)} key={item} animate={{ rotateY: touched.includes(item) ? 180 : (animate && item % 2 ? 180 : 0), y: animate ? [0, -5, 0] : 0 }} whileTap={{ scale: .9 }} transition={{ ...transition, delay: item * .2 }}>
@@ -33,6 +39,7 @@ function AnimatedScene({ scene, animate }: { scene: Demo['scene']; animate: bool
 export function ExperimentCarousel({ motionEnabled }: { motionEnabled: boolean }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
+  const [cardTouches, setCardTouches] = useState<number[]>([]);
   const reducedMotion = useReducedMotionPreference();
   const animate = motionEnabled && !reducedMotion;
   const move = (direction: number) => {
@@ -50,11 +57,13 @@ export function ExperimentCarousel({ motionEnabled }: { motionEnabled: boolean }
     </div></div>
     <motion.div ref={trackRef} className="experiment-track" drag="x" dragConstraints={{ left: -900, right: 0 }} dragElastic={.12}
       onDragEnd={(_, info) => { if (info.offset.x < -55) move(1); else if (info.offset.x > 55) move(-1); }}>
-      {demos.map((demo, index) => { const Icon = demo.icon; return <article className={`experiment-card${index === active ? ' is-current' : ''}`} key={demo.scene} onClick={() => { setActive(index); }}>
+      {demos.map((demo, index) => { const Icon = demo.icon; return <motion.article className={`experiment-card${index === active ? ' is-current' : ''}`} key={demo.scene}
+        whileTap={animate ? { scale: .96, rotateY: index % 2 ? -2 : 2, y: -5 } : { scale: .99 }}
+        onClick={() => { setActive(index); setCardTouches((touches) => demos.map((_, i) => i === index ? (touches[i] ?? 0) + 1 : touches[i] ?? 0)); }}>
         <div className="experiment-card-heading"><span><Icon size={18} /></span><small>EXPERIMENTO 0{index + 1}</small></div>
-        {demo.scene === 'memory' ? <div className="experiment-real-demo"><Suspense fallback={<div className="game-loading" role="status">Preparando a demonstração…</div>}><MemoryGame motionEnabled={animate} /></Suspense></div> : <AnimatedScene scene={demo.scene} animate={animate} />}
+        {demo.scene === 'memory' ? <div className="experiment-real-demo"><Suspense fallback={<div className="game-loading" role="status">Preparando a demonstração…</div>}><MemoryGame motionEnabled={animate} /></Suspense></div> : <AnimatedScene scene={demo.scene} animate={animate} pulse={cardTouches[index] ?? 0} />}
         <h3>{demo.title}</h3><p>{demo.description}</p>
-      </article>; })}
+      </motion.article>; })}
     </motion.div>
     <div className="experiment-dots" aria-label={`Demonstração ${active + 1} de ${demos.length}`}>{demos.map((demo, i) =>
       <button key={demo.scene} className={i === active ? 'active' : ''} aria-label={`Mostrar ${demo.title}`} aria-pressed={i === active} onClick={() => move(i - active)} />)}</div>
