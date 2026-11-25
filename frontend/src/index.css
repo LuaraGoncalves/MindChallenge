@@ -199,11 +199,46 @@ h1 { font-family: 'Pirata One', serif; font-size: 80px; font-weight: 400; line-h
 .memory-match-check { position: absolute; top: 5px; right: 5px; padding: 2px; border-radius: 50%; color: #fff4d7; background: #246d68; }
 .memory-grid[inert] { visibility: hidden; }
 .memory-pause { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; text-align: center; color: #f3dfba; }
-.memory-pause h3, .memory-victory h3 { font-family: 'Pirata One', serif; font-size: 30px; font-weight: 400; }
-.memory-victory { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 20px; padding-top: 28px; color: #f3dfba; }
-.memory-victory > svg { color: #d3ab57; }
-.memory-victory p { font-size: 14px; margin-top: 5px; }
-.memory-victory .ribbon-button { font-size: 14px; }
+.memory-pause h3 { font-family: 'Pirata One', serif; font-size: 30px; font-weight: 400; }
+.victory-backdrop { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; overflow-y: auto; padding: 20px; background: #120e0de8; backdrop-filter: blur(7px); }
+.victory-modal { position: relative; width: min(510px,100%); max-height: calc(100dvh - 40px); overflow-y: auto; padding: 34px 38px 28px; text-align: center; color: #493226; background: #f3dfba url('/assets/parchment.png') center / 100% 100%; border: 5px solid #93613e; outline: 2px solid #d3ab57; box-shadow: 0 0 0 7px #1b1410aa, 0 22px 70px #000b; }
+.victory-modal::before { content: ''; position: absolute; inset: 7px; pointer-events: none; border: 1px solid #b99165; }
+.victory-close { position: absolute; top: 14px; right: 14px; z-index: 2; color: #493226; border-color: #93613e80; }
+.victory-emblem { position: relative; z-index: 1; width: 76px; height: 76px; display: grid; place-items: center; margin: 0 auto 12px; color: #fbe9bd; background: radial-gradient(circle at 35% 30%, #e4bd68, #9b572e 70%); border: 4px double #f4d889; border-radius: 50%; box-shadow: 0 7px 0 #693b25, 0 0 28px #d3ab5780; }
+.victory-perfect .victory-emblem { background: radial-gradient(circle at 35% 30%, #ffe787, #d17a28 72%); box-shadow: 0 7px 0 #854819, 0 0 34px #ffcf4eaa; }
+.victory-excellent .victory-emblem { background: radial-gradient(circle at 35% 30%, #bce9d7, #267a72 72%); box-shadow: 0 7px 0 #18544e, 0 0 30px #55d7c299; }
+.victory-phew .victory-emblem { background: radial-gradient(circle at 35% 30%, #f0b8a0, #a54137 72%); box-shadow: 0 7px 0 #682820, 0 0 28px #e36c4d88; }
+.victory-kicker { position: relative; color: #755740; font-size: 11px; font-weight: 800; letter-spacing: .16em; }
+.victory-modal h3 { position: relative; margin: 3px 0 4px; color: #493226; font: 400 42px/1.12 'Pirata One',serif; text-shadow: 1px 2px 0 #fff2d3; }
+.victory-perfect h3 { color: #a45c15; }
+.victory-excellent h3 { color: #246d68; }
+.victory-phew h3 { color: #a54137; }
+.victory-copy { position: relative; color: #755740; font-size: 15px; }
+.victory-stats { position: relative; display: flex; justify-content: center; gap: 9px; flex-wrap: wrap; margin: 18px 0; }
+.victory-stats span { display: inline-flex; align-items: center; gap: 6px; padding: 7px 10px; color: #f6dfb5; background: #294a43; border: 1px solid #d3ab57; border-radius: 4px; font-size: 12px; font-weight: 700; }
+.victory-score-form { position: relative; padding: 14px; text-align: left; background: #fff4d8a8; border: 1px solid #b9916580; }
+.victory-score-form > label { display: block; margin-bottom: 7px; color: #493226; font-size: 13px; font-weight: 700; }
+.victory-score-form > div { display: flex; gap: 8px; }
+.victory-score-form input { min-width: 0; flex: 1; padding: 9px 11px; color: #493226; background: white; border: 1px solid #93613e; border-radius: 3px; font: inherit; }
+.victory-score-form input:focus-visible { outline: 3px solid #246d68; outline-offset: 2px; }
+.victory-score-form .ribbon-button { min-height: 40px; padding: 8px 12px; font-size: 12px; }
+.victory-score-form .ribbon-button:disabled { cursor: default; }
+.ranking-error, .ranking-success { margin-top: 8px; font-size: 12px; }
+.ranking-error { color: #8e332c; }
+.ranking-success { color: #286044; font-weight: 700; }
+.victory-leaderboard { position: relative; margin-top: 15px; text-align: left; }
+.victory-leaderboard h4 { margin-bottom: 5px; color: #493226; font-family: 'Pirata One',serif; font-size: 21px; font-weight: 400; }
+.victory-leaderboard ol { margin: 0; padding: 0; list-style: none; }
+.victory-leaderboard li { display: flex; justify-content: space-between; gap: 12px; padding: 4px 8px; color: #493226; border-bottom: 1px dashed #93613e70; font-size: 13px; }
+.victory-leaderboard li:first-child { color: #8d5714; font-weight: 700; }
+.victory-leaderboard li strong { color: #246d68; font-variant-numeric: tabular-nums; }
+.victory-leaderboard > p { color: #755740; font-size: 12px; }
+.victory-replay { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 42px; margin-top: 17px; padding: 9px 16px; color: #f8e8c3; background: #294a43; border: 1px solid #1e3732; border-radius: 3px; font-weight: 700; }
+.victory-replay:hover { background: #1d3933; }
+.victory-burst { position: absolute; top: 54px; left: 50%; width: 110px; height: 110px; transform: translateX(-50%); pointer-events: none; }
+.victory-burst span { position: absolute; left: 50%; top: 0; width: 5px; height: 13px; border-radius: 4px; background: #d3ab57; transform-origin: 50% 55px; animation: victory-spark 1.8s ease-in-out infinite; }
+.victory-burst span:nth-child(2) { transform: rotate(60deg); animation-delay: .1s; }.victory-burst span:nth-child(3) { transform: rotate(120deg); animation-delay: .2s; }.victory-burst span:nth-child(4) { transform: rotate(180deg); animation-delay: .3s; }.victory-burst span:nth-child(5) { transform: rotate(240deg); animation-delay: .4s; }.victory-burst span:nth-child(6) { transform: rotate(300deg); animation-delay: .5s; }
+@keyframes victory-spark { 0%,100% { opacity: .25; scale: .7; } 50% { opacity: 1; scale: 1.25; } }
 .memory-message { min-height: 340px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 20px; text-align: center; padding: 30px; color: #f3dfba; }
 .memory-message p { max-width: 48ch; }
 .memory-credits { color: #e0bf94; font-size: 12px; margin-top: 18px; line-height: 1.7; }
@@ -230,8 +265,13 @@ h1 { font-family: 'Pirata One', serif; font-size: 80px; font-weight: 400; line-h
   .pokemon-name { font-size: 9px; }
   .memory-pause h3 { font-size: 25px; }
   .memory-pause { gap: 13px; }
-  .memory-victory { text-align: center; gap: 12px; }
-  .memory-victory h3 { font-size: 27px; }
+  .victory-backdrop { padding: 10px; }
+  .victory-modal { max-height: calc(100dvh - 20px); padding: 28px 18px 20px; }
+  .victory-modal h3 { font-size: 36px; }
+  .victory-stats { gap: 6px; }
+  .victory-stats span { padding: 6px 8px; font-size: 11px; }
+  .victory-score-form > div { flex-direction: column; }
+  .victory-score-form .ribbon-button { width: 100%; }
 }
 @keyframes ribbon-sway { 0%, 100% { rotate: -3deg; } 50% { rotate: 3deg; } }
 @keyframes compass-turn { to { rotate: 360deg; } }
