@@ -136,13 +136,14 @@ h1 { font-family: 'Pirata One', serif; font-size: 80px; font-weight: 400; line-h
 .experiment-real-demo .phaser-frame canvas { width: 100% !important; height: 100% !important; object-fit: contain; }
 .experiment-real-demo .reset-demo { top: 10px; right: 10px; width: 32px; height: 32px; }
 .experiment-memory, .experiment-shapes, .experiment-puzzle, .experiment-colors { height: 165px; display: flex; align-items: center; justify-content: center; gap: 12px; overflow: hidden; color: #f3dfba; background: #233b35; border: 5px solid #93613e; }
-.experiment-memory span { display: grid; place-items: center; width: 54px; height: 72px; color: #f3dfba; background: linear-gradient(145deg, #31766e, #194b46); border: 2px solid #d3ab57; border-radius: 5px; box-shadow: 3px 6px 8px #100a0850; backface-visibility: hidden; transform-style: preserve-3d; }
-.experiment-shapes span { color: #d3ab57; filter: drop-shadow(3px 6px 2px #100a0870); transform-style: preserve-3d; }
-.experiment-shapes span:nth-child(2) { color: #a3c1a0; }
-.experiment-shapes span:nth-child(3) { color: #e8c1a0; }
+.experiment-memory button { display: grid; place-items: center; width: 54px; height: 72px; padding: 0; color: #f3dfba; background: linear-gradient(145deg, #31766e, #194b46); border: 2px solid #d3ab57; border-radius: 5px; box-shadow: 3px 6px 8px #100a0850; backface-visibility: hidden; transform-style: preserve-3d; cursor: pointer; }
+.experiment-memory button:focus-visible, .experiment-shapes button:focus-visible, .experiment-puzzle button:focus-visible, .experiment-colors button:focus-visible { outline: 3px solid #f4c951; outline-offset: 3px; }
+.experiment-shapes button { padding: 0; color: #d3ab57; background: transparent; border: 0; filter: drop-shadow(3px 6px 2px #100a0870); transform-style: preserve-3d; cursor: pointer; }
+.experiment-shapes button:nth-child(2) { color: #a3c1a0; }
+.experiment-shapes button:nth-child(3) { color: #e8c1a0; }
 .experiment-puzzle { display: grid; grid-template-columns: repeat(2, 54px); grid-template-rows: repeat(2, 54px); gap: 0; }
-.experiment-puzzle span { display: grid; place-items: center; color: #f3dfba; background: linear-gradient(145deg, #31766e, #194b46); border: 1px solid #d3ab57; box-shadow: 2px 4px 5px #100a0860; transform-style: preserve-3d; }
-.experiment-colors span { width: 45px; height: 70px; border: 2px solid #f3dfba; border-radius: 24px 24px 8px 8px; }
+.experiment-puzzle button { display: grid; place-items: center; padding: 0; color: #f3dfba; background: linear-gradient(145deg, #31766e, #194b46); border: 1px solid #d3ab57; box-shadow: 2px 4px 5px #100a0860; transform-style: preserve-3d; cursor: pointer; }
+.experiment-colors button { width: 45px; height: 70px; padding: 0; border: 2px solid #f3dfba; border-radius: 24px 24px 8px 8px; cursor: pointer; }
 .experiment-dots { display: flex; justify-content: center; gap: 9px; padding-top: 3px; }
 .experiment-dots button { width: 10px; height: 10px; padding: 0; border: 0; border-radius: 50%; background: #b99165; }
 .experiment-dots button.active { width: 27px; border-radius: 8px; background: #d3ab57; }
