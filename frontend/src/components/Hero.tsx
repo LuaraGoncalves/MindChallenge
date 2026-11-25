@@ -10,7 +10,7 @@ export function Hero({ motionEnabled, onToggleMotion }: HeroProps) {
         <div className="nav-links">
           <a href="#desafios">O mural</a>
           <a href="#extras">Modos extras</a>
-          <a href="#demo">Demo Phaser</a>
+          <a href="#demo">Mesa de experimentos</a>
         </div>
         <button className="icon-button motion-toggle" onClick={onToggleMotion}
           aria-label={motionEnabled ? 'Pausar animações' : 'Ativar animações'}

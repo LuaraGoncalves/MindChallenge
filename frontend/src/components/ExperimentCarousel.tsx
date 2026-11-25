@@ -1,6 +1,6 @@
 import { lazy, Suspense, useRef, useState } from 'react';
 import { motion } from 'motion/react';
-import { ArrowLeft, ArrowRight, FlaskConical, Layers, Palette, Puzzle, Shapes } from 'lucide-react';
+import { ArrowLeft, ArrowRight, FlaskConical, Layers, Palette, Puzzle, Shapes, Sparkles } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { useReducedMotionPreference } from '../hooks/useReducedMotionPreference';
 const MemoryGame = lazy(() => import('./MemoryGame'));
@@ -14,17 +14,20 @@ const demos: Demo[] = [
 ];
 
 function AnimatedScene({ scene, animate }: { scene: Demo['scene']; animate: boolean }) {
+  const [touched, setTouched] = useState<number[]>([]);
   const transition = animate ? { duration: 1.8, repeat: Infinity, repeatType: 'mirror' as const, ease: 'easeInOut' as const } : { duration: 0 };
-  if (scene === 'memory') return <div className="experiment-memory" aria-hidden="true">{[0, 1, 2, 3].map((item) =>
-    <motion.span key={item} animate={animate ? { rotateY: item % 2 ? 180 : 0, y: [0, -5, 0] } : { rotateY: 0, y: 0 }} transition={{ ...transition, delay: item * .2 }}>
-      <Layers size={25} />
-    </motion.span>)}</div>;
-  if (scene === 'shapes') return <div className="experiment-shapes" aria-hidden="true">{[Shapes, Puzzle, Layers].map((Icon, i) =>
-    <motion.span key={i} animate={animate ? { y: [0, -17 - i * 3, 0], rotate: [0, i % 2 ? 12 : -12, 0] } : { y: 0, rotate: 0 }} transition={{ ...transition, delay: i * .22 }}><Icon size={38} /></motion.span>)}</div>;
-  if (scene === 'puzzle') return <div className="experiment-puzzle" aria-hidden="true">{[0, 1, 2, 3].map((item) =>
-    <motion.span key={item} animate={animate ? { x: [item % 2 ? 12 : -12, 0], y: [item < 2 ? -10 : 10, 0], rotate: [item * 7, 0] } : { x: 0, y: 0, rotate: 0 }} transition={{ ...transition, delay: item * .16 }}><Puzzle size={37} /></motion.span>)}</div>;
-  return <div className="experiment-colors" aria-hidden="true">{['#d3ab57', '#a54137', '#246d68', '#f3dfba'].map((color, i) =>
-    <motion.span key={color} style={{ backgroundColor: color }} animate={animate ? { scale: [1, 1.18, 1], y: [0, -9, 0] } : { scale: 1, y: 0 }} transition={{ ...transition, delay: i * .17 }} />)}</div>;
+  const toggle = (index: number) => setTouched((items) => items.includes(index) ? items.filter((item) => item !== index) : [...items, index]);
+  const interaction = (index: number, label: string) => ({ type: 'button' as const, 'aria-label': label, 'aria-pressed': touched.includes(index), onPointerDown: (event: React.PointerEvent) => event.stopPropagation(), onClick: (event: React.MouseEvent) => { event.stopPropagation(); toggle(index); } });
+  if (scene === 'memory') return <div className="experiment-memory">{[0, 1, 2, 3].map((item) =>
+    <motion.button {...interaction(item, `Virar carta ${item + 1}`)} key={item} animate={{ rotateY: touched.includes(item) ? 180 : (animate && item % 2 ? 180 : 0), y: animate ? [0, -5, 0] : 0 }} whileTap={{ scale: .9 }} transition={{ ...transition, delay: item * .2 }}>
+      {touched.includes(item) ? <Sparkles size={25} /> : <Layers size={25} />}
+    </motion.button>)}</div>;
+  if (scene === 'shapes') return <div className="experiment-shapes">{[Shapes, Puzzle, Layers].map((Icon, i) =>
+    <motion.button {...interaction(i, `Mover forma ${i + 1}`)} key={i} animate={animate ? { y: touched.includes(i) ? -24 : [0, -17 - i * 3, 0], rotate: touched.includes(i) ? 180 : [0, i % 2 ? 12 : -12, 0] } : { y: touched.includes(i) ? -18 : 0, rotate: touched.includes(i) ? 20 : 0 }} whileTap={{ scale: .8 }} transition={{ ...transition, delay: i * .22 }}><Icon size={38} /></motion.button>)}</div>;
+  if (scene === 'puzzle') return <div className="experiment-puzzle">{[0, 1, 2, 3].map((item) =>
+    <motion.button {...interaction(item, `Encaixar peça ${item + 1}`)} key={item} animate={animate ? { x: touched.includes(item) ? 0 : [item % 2 ? 12 : -12, 0], y: touched.includes(item) ? 0 : [item < 2 ? -10 : 10, 0], rotate: touched.includes(item) ? 0 : [item * 7, 0], scale: touched.includes(item) ? 1.08 : 1 } : { x: 0, y: 0, rotate: 0, scale: touched.includes(item) ? 1.08 : 1 }} whileTap={{ scale: .85 }} transition={{ ...transition, delay: item * .16 }}><Puzzle size={37} /></motion.button>)}</div>;
+  return <div className="experiment-colors">{['#d3ab57', '#a54137', '#246d68', '#f3dfba'].map((color, i) =>
+    <motion.button {...interaction(i, `Acender cor ${i + 1}`)} key={color} style={{ backgroundColor: color }} animate={animate ? { scale: touched.includes(i) ? 1.45 : [1, 1.18, 1], y: touched.includes(i) ? -15 : [0, -9, 0], boxShadow: touched.includes(i) ? `0 0 22px ${color}` : '0 0 0px transparent' } : { scale: touched.includes(i) ? 1.35 : 1, y: touched.includes(i) ? -12 : 0 }} whileTap={{ scale: .8 }} transition={{ ...transition, delay: i * .17 }} />)}</div>;
 }
 
 export function ExperimentCarousel({ motionEnabled }: { motionEnabled: boolean }) {
