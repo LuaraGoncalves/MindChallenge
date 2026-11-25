@@ -126,6 +126,9 @@ h1 { font-family: 'Pirata One', serif; font-size: 80px; font-weight: 400; line-h
 .experiment-track:active { cursor: grabbing; }
 .experiment-card { flex: 0 0 min(320px, 80vw); min-width: 0; padding: 14px; color: #493226; background: #f3dfba url('/assets/parchment.png') center / 100% 100%; border: 3px solid #93613e; box-shadow: var(--shadow); user-select: none; perspective: 700px; transition: transform .2s, border-color .2s; }
 .experiment-card.is-current { border-color: #d3ab57; transform: translateY(-4px); }
+.experiment-card { cursor: pointer; transform-style: preserve-3d; }
+.experiment-card:hover { border-color: #d3ab57; box-shadow: 0 12px 24px #170b08a0, 0 0 18px #d3ab5740; }
+.experiment-card:active { box-shadow: 0 3px 8px #170b08a0, 0 0 24px #d3ab5760; }
 .experiment-card-heading { display: flex; align-items: center; gap: 9px; margin-bottom: 12px; color: #755740; }
 .experiment-card-heading > span { display: grid; place-items: center; width: 32px; height: 32px; color: #f3dfba; background: #246d68; border-radius: 50%; }
 .experiment-card-heading small { font-size: 10px; letter-spacing: .08em; }
