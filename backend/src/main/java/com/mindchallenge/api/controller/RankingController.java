@@ -1,6 +1,7 @@
 package com.mindchallenge.api.controller;
 
 import java.util.List;
+import java.security.Principal;
 
 import jakarta.validation.Valid;
 
@@ -38,7 +39,7 @@ public class RankingController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public RankingEntry submitScore(@Valid @RequestBody SubmitScoreRequest request) {
-		return service.submitScore(request.playerName(), request.gameSlug(), request.score());
+	public RankingEntry submitScore(@Valid @RequestBody SubmitScoreRequest request, Principal player) {
+		return service.submitScore(player.getName(), request.gameSlug(), request.score());
 	}
 }

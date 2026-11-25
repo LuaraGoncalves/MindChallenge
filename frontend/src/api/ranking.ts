@@ -12,9 +12,18 @@ const GAME_SLUG = 'memory-kids';
 const LOCAL_KEY = 'mindchallenge:memory-scores:v1';
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  const headers = new Headers(init?.headers);
+  if (init?.method && init.method !== 'GET') {
+    const csrfResponse = await fetch(`${apiBase}/api/admin/csrf`, { credentials: 'include', cache: 'no-store' });
+    if (!csrfResponse.ok) throw new Error('Não foi possível preparar a sessão segura.');
+    const csrf = await csrfResponse.json() as { token: string; headerName: string };
+    headers.set(csrf.headerName, csrf.token);
+  }
+  if (init?.body) headers.set('Content-Type', 'application/json');
   const response = await fetch(`${apiBase}${path}`, {
     ...init,
-    headers: { 'Content-Type': 'application/json', ...init?.headers },
+    headers,
+    credentials: 'include',
   });
   if (!response.ok) throw new Error('Não foi possível acessar o placar online agora.');
   return response.json() as Promise<T>;
@@ -34,4 +43,7 @@ export const rankingApi = {
     method: 'POST', body: JSON.stringify({ playerName, gameSlug: GAME_SLUG, score }),
   }),
   top: () => request<RankingEntry[]>(`/api/rankings/${GAME_SLUG}`),
+  me: () => request<{ username: string }>('/api/auth/me'),
+  login: (username: string, password: string) => request<{ username: string }>('/api/auth/login', { method: 'POST', body: JSON.stringify({ username, password }) }),
+  register: (username: string, password: string) => request<{ username: string }>('/api/auth/register', { method: 'POST', body: JSON.stringify({ username, password }) }),
 };

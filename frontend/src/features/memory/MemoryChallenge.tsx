@@ -43,6 +43,10 @@ function MemoryBoard({ characters, canAnimate }: { characters: MemoryCharacter[]
   const pairs = characters.length;
   const score = memoryScore(attempts, seconds, pairs);
   const [playerName, setPlayerName] = useState(getSavedPlayerName);
+  const [password, setPassword] = useState('');
+  const [saveMode, setSaveMode] = useState<'choose' | 'local' | 'account' | 'register'>('choose');
+  const [account, setAccount] = useState('');
+  const [authenticated, setAuthenticated] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState('');
@@ -69,30 +73,37 @@ function MemoryBoard({ characters, canAnimate }: { characters: MemoryCharacter[]
       scoreStoredRef.current = false;
       return;
     }
-    if (!scoreStoredRef.current) {
-      let savedName = 'Jogador';
-      try { savedName = localStorage.getItem('mindchallenge:player-name') || savedName; } catch { /* Nome padrão quando o armazenamento estiver bloqueado. */ }
-      saveLocalScore({ playerName: savedName, gameSlug: 'memory-kids', score });
-      scoreStoredRef.current = true;
-    }
     setRankingLoading(true);
     rankingApi.top().then(setRanking).catch(() => setRanking([])).finally(() => setRankingLoading(false));
+    rankingApi.me().then((user) => { setAuthenticated(true); setAccount(user.username); }).catch(() => setAuthenticated(false));
   }, [won, score]);
 
   async function submitScore(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const cleanName = playerName.trim();
-    if (!cleanName || submitting || submitted) return;
+    const cleanName = account.trim();
+    if (!cleanName || !password || submitting || submitted) return;
     setSubmitting(true);
     setSubmitError('');
     try {
-      localStorage.setItem('mindchallenge:player-name', cleanName);
-      await rankingApi.submit(cleanName, score);
+      const user = saveMode === 'register' ? await rankingApi.register(cleanName, password) : await rankingApi.login(cleanName, password);
+      setAuthenticated(true);
+      setAccount(user.username);
+      setPassword('');
+      await rankingApi.submit(user.username, score);
       setSubmitted(true);
       setRanking(await rankingApi.top());
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : 'Falha ao enviar sua pontuação.');
     } finally { setSubmitting(false); }
+  }
+
+  function saveScoreLocally() {
+    const cleanName = playerName.trim() || 'Jogador';
+    try { localStorage.setItem('mindchallenge:player-name', cleanName); } catch { /* O placar atual ainda fica visível até fechar o jogo. */ }
+    saveLocalScore({ playerName: cleanName, gameSlug: 'memory-kids', score });
+    scoreStoredRef.current = true;
+    setSubmitError('');
+    setSubmitted(true);
   }
 
   function restart() {
@@ -152,13 +163,25 @@ function MemoryBoard({ characters, canAnimate }: { characters: MemoryCharacter[]
           <h3 id="victory-title">{winner.title}</h3>
           <p className="victory-copy">{winner.message}</p>
           <div className="victory-stats"><span><Trophy size={17} />{score} pontos</span><span><Brain size={17} />{attempts} tentativas</span><span><Clock3 size={17} />{formatTime(seconds)}</span></div>
-          <form className="victory-score-form" onSubmit={submitScore}>
-            <label htmlFor="ranking-player-name">Seu nome no placar</label>
-            <div><input id="ranking-player-name" value={playerName} onChange={(event) => setPlayerName(event.target.value)} maxLength={40} required placeholder="Como quer aparecer?" disabled={submitted} />
-              <button className="ribbon-button" type="submit" disabled={submitting || submitted}>{submitted ? 'Pontuação enviada!' : submitting ? 'Enviando…' : 'Salvar no placar'}</button></div>
-            {submitError && <p className="ranking-error" role="alert">{submitError} Sua pontuação continua salva neste navegador.</p>}
-            {submitted && <p className="ranking-success" role="status">Seu resultado entrou no ranking online!</p>}
-          </form>
+          {!submitted && saveMode === 'choose' && <div className="victory-save-options"><p>Onde quer guardar esta pontuação?</p>
+            <button type="button" className="ribbon-button" onClick={() => setSaveMode('local')}>Salvar só neste aparelho</button>
+            <button type="button" className="victory-account-choice" onClick={() => { setSaveMode('account'); setSubmitError(''); }}>Entrar ou criar conta para o placar online</button>
+          </div>}
+          {!submitted && saveMode === 'local' && <div className="victory-score-form"><label htmlFor="ranking-player-name">Seu nome no histórico deste aparelho</label>
+            <div><input id="ranking-player-name" value={playerName} onChange={(event) => setPlayerName(event.target.value)} maxLength={40} placeholder="Como quer aparecer?" />
+              <button className="ribbon-button" type="button" onClick={saveScoreLocally}>Salvar resultado</button></div>
+            <button type="button" className="victory-account-choice local-back" onClick={() => setSaveMode('choose')}>Voltar às opções de salvamento</button>
+            {submitError && <p className="ranking-error" role="alert">{submitError}</p>}
+          </div>}
+          {!submitted && saveMode === 'account' && <form className="victory-score-form" onSubmit={submitScore}>
+            <label htmlFor="ranking-account">Nome da conta</label><input id="ranking-account" value={account} onChange={(event) => setAccount(event.target.value)} minLength={3} maxLength={30} pattern="[A-Za-z0-9_.-]+" required placeholder="3 a 30 letras ou números" />
+            {!authenticated && <><label htmlFor="ranking-password">Senha</label><input id="ranking-password" type="password" value={password} onChange={(event) => setPassword(event.target.value)} minLength={12} maxLength={72} required autoComplete={saveMode === 'register' ? 'new-password' : 'current-password'} placeholder="Pelo menos 12 caracteres" /> </>}
+            <div className="account-form-actions"><button className="ribbon-button" type="submit" disabled={submitting || authenticated}>{submitting ? 'Enviando…' : authenticated ? `Conectado como ${account}` : 'Entrar e salvar'}</button>
+              <button type="button" className="victory-account-choice" onClick={() => { setSaveMode(saveMode === 'register' ? 'account' : 'register'); setSubmitError(''); }}>{saveMode === 'register' ? 'Já tenho conta' : 'Criar conta'}</button></div>
+            {submitError && <><p className="ranking-error" role="alert">{submitError} Você ainda pode salvar localmente.</p><button type="button" className="victory-account-choice local-back" onClick={() => { setPlayerName(account); setSaveMode('local'); }}>Salvar esta partida só neste aparelho</button></>}
+            {authenticated && !submitted && <button type="button" className="ribbon-button account-save-score" disabled={submitting} onClick={async () => { setSubmitting(true); try { await rankingApi.submit(account, score); setSubmitted(true); setRanking(await rankingApi.top()); } catch (error) { setSubmitError(error instanceof Error ? error.message : 'Não foi possível salvar.'); } finally { setSubmitting(false); } }}>Salvar no placar online</button>}
+          </form>}
+          {submitted && <p className="ranking-success" role="status">{saveMode === 'local' ? 'Resultado salvo neste aparelho.' : 'Seu resultado entrou no ranking online!'}</p>}
           <div className="victory-leaderboard"><h4>Melhores aventureiros</h4>{rankingLoading ? <p role="status">Carregando placar…</p> : ranking.length ? <ol>{ranking.slice(0, 5).map((entry, index) => <li key={entry.id}><span>{index + 1}. {entry.playerName}</span><strong>{entry.score}</strong></li>)}</ol> : <p>O placar online aparecerá aqui quando estiver disponível.</p>}</div>
           <button className="victory-replay" onClick={restart}><RotateCcw size={16} />Jogar novamente</button>
         </motion.section>

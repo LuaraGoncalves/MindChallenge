@@ -1,6 +1,8 @@
 package com.mindchallenge.api.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -20,6 +22,7 @@ class RankingControllerTest {
 	@Test
 	void shouldSubmitScore() throws Exception {
 		mockMvc.perform(post("/api/rankings")
+						.with(user("Luara").roles("PLAYER")).with(csrf())
 						.contentType(MediaType.APPLICATION_JSON)
 						.content("""
 								{
@@ -36,6 +39,7 @@ class RankingControllerTest {
 	@Test
 	void shouldValidateScorePayload() throws Exception {
 		mockMvc.perform(post("/api/rankings")
+						.with(user("Luara").roles("PLAYER")).with(csrf())
 						.contentType(MediaType.APPLICATION_JSON)
 						.content("""
 								{
