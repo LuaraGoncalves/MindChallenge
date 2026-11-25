@@ -1,13 +1,13 @@
 import { lazy, Suspense, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { Brain, FlaskConical, MoveUp } from 'lucide-react';
+import { Brain, MoveUp } from 'lucide-react';
 import { MotionConfig } from 'motion/react';
 import { ChallengeSections } from './components/ChallengeSections';
 import { Hero } from './components/Hero';
+import { ExperimentCarousel } from './components/ExperimentCarousel';
 import { useReducedMotionPreference } from './hooks/useReducedMotionPreference';
 
-const MemoryGame = lazy(() => import('./components/MemoryGame'));
 const MemoryChallenge = lazy(() => import('./features/memory/MemoryChallenge'));
 const AdminPanel = lazy(() => import('./features/admin/AdminPanel'));
 gsap.registerPlugin(useGSAP);
@@ -43,18 +43,7 @@ function GameApp() {
         {memoryOpen && <Suspense fallback={<div className="memory-message" role="status">Preparando o tabuleiro…</div>}>
           <MemoryChallenge canAnimate={canAnimate} onClose={() => { setMemoryOpen(false); returnFocusRef.current?.focus(); }} />
         </Suspense>}
-        <section id="demo" className="demo-section page-width" aria-labelledby="demo-title">
-          <div className="section-heading">
-            <span className="heading-emblem" aria-hidden="true"><FlaskConical size={25} /></span>
-            <h2 id="demo-title">Mesa de experimentos</h2>
-            <span className="section-rule" />
-            <span className="cloth-label">Demo Phaser</span>
-          </div>
-          <p className="section-intro">Uma pequena demonstração interativa do nosso universo em construção.</p>
-          <Suspense fallback={<div className="game-loading" role="status">Preparando a mesa…</div>}>
-            <MemoryGame motionEnabled={motionEnabled} />
-          </Suspense>
-        </section>
+        <ExperimentCarousel motionEnabled={canAnimate} />
       </main>
       <footer className="site-footer page-width">
         <a className="brand-mark" href="#inicio"><Brain size={24} />MindChallenge</a>
