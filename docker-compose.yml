@@ -21,6 +21,12 @@ services:
       DATABASE_USERNAME: ${POSTGRES_USER:-mindchallenge}
       DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-change-me}
       CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:5173,http://127.0.0.1:5173,http://localhost:8080}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      SESSION_COOKIE_SECURE: ${SESSION_COOKIE_SECURE:-false}
+      IMAGES_DIRECTORY: /app/uploads
+    volumes:
+      - character-images:/app/uploads
     depends_on:
       db:
         condition: service_healthy
@@ -37,3 +43,4 @@ services:
 
 volumes:
   postgres-data:
+  character-images:

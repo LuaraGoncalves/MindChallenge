@@ -138,6 +138,73 @@ h1 { font-family: 'Pirata One', serif; font-size: 80px; font-weight: 400; line-h
 .detail-meta span { display: flex; align-items: center; gap: 7px; }
 .quest-dialog .development-note { font-size: 14px; padding-block: 15px; border-top: 1px dashed #9a734770; }
 .quest-dialog .ribbon-button { margin-top: 10px; }
+.memory-section { padding-block: 38px 48px; }
+.memory-section .back-top { border: 0; background: transparent; color: #f1d5a9; }
+.memory-toolbar { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; margin-block: 22px; color: #eed4ad; }
+.memory-toolbar > p { flex: 1; font-size: 15px; }
+.memory-toolbar label { display: flex; align-items: center; gap: 10px; font-size: 13px; min-width: 0; max-width: 100%; }
+.memory-toolbar select { font: inherit; color: #493226; padding: 10px 28px 10px 12px; border: 0; border-radius: 3px; background: #f3dfba; cursor: pointer; min-width: 0; max-width: 300px; }
+.memory-toolbar select:focus-visible { outline: 3px solid #f4c951; outline-offset: 4px; }
+.memory-toolbar .ribbon-button { min-height: 40px; font-size: 13px; padding: 9px 15px; }
+.memory-workbench { padding: 26px 32px 30px; background: #213b35; border: 8px solid #92613e; box-shadow: var(--shadow); outline: 2px solid #311c14; }
+.memory-scoreboard { display: flex; align-items: center; justify-content: center; gap: 28px; color: #f6dfb5; font-size: 14px; flex-wrap: wrap; }
+.memory-scoreboard > span { display: inline-flex; align-items: center; gap: 7px; }
+.memory-scoreboard strong { font-variant-numeric: tabular-nums; font-weight: 700; }
+.memory-actions { margin-left: auto; display: flex; gap: 8px; }
+.memory-actions .icon-button { border-color: #b5c4a861; }
+.memory-actions button:disabled { cursor: default; }
+.memory-announcement { text-align: center; color: #d6dabb; font-size: 14px; margin: 18px 0 22px; min-height: 22px; }
+.memory-table { position: relative; max-width: 720px; margin-inline: auto; }
+.memory-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 14px; }
+.memory-grid-12 { grid-template-columns: repeat(6, minmax(0,1fr)); }
+.memory-card { position: relative; width: 100%; aspect-ratio: .84; border: 0; border-radius: 6px; padding: 0; background: transparent; perspective: 900px; }
+.memory-card[aria-disabled='true'] { cursor: default; }
+.memory-card-inner { position: absolute; inset: 0; display: block; transform-style: preserve-3d; border-radius: 6px; box-shadow: 2px 4px 7px #0b201b70; }
+.memory-card-back, .memory-card-front { position: absolute; inset: 0; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-direction: column; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.memory-card-back { background: #275b55; border: 3px solid #c3a365; color: #e9d6a6; padding: 9px; }
+.card-back-border { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; width: 100%; height: 100%; border: 1px solid #b1ba8d77; border-radius: 3px; }
+.card-back-border > span { font-family: 'Pirata One', serif; font-size: 20px; }
+.memory-card-front { background: #f3dfba url('/assets/parchment.png') center / 100% 100%; color: #493226; transform: rotateY(180deg); border: 2px solid #d3ab57; padding: 8px; }
+.memory-card-front img { display: block; width: 100%; height: calc(100% - 24px); object-fit: contain; pointer-events: none; user-select: none; }
+.pokemon-name { font-size: 13px; font-weight: 700; text-transform: capitalize; max-width: 100%; overflow-wrap: anywhere; line-height: 1.1; text-align: center; }
+.is-matched .memory-card-front { border-color: #5b9d78; background-color: #d5e2b9; }
+.memory-match-check { position: absolute; top: 5px; right: 5px; padding: 2px; border-radius: 50%; color: #fff4d7; background: #246d68; }
+.memory-grid[inert] { visibility: hidden; }
+.memory-pause { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; text-align: center; color: #f3dfba; }
+.memory-pause h3, .memory-victory h3 { font-family: 'Pirata One', serif; font-size: 30px; font-weight: 400; }
+.memory-victory { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 20px; padding-top: 28px; color: #f3dfba; }
+.memory-victory > svg { color: #d3ab57; }
+.memory-victory p { font-size: 14px; margin-top: 5px; }
+.memory-victory .ribbon-button { font-size: 14px; }
+.memory-message { min-height: 340px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 20px; text-align: center; padding: 30px; color: #f3dfba; }
+.memory-message p { max-width: 48ch; }
+.memory-credits { color: #e0bf94; font-size: 12px; margin-top: 18px; line-height: 1.7; }
+.memory-credits a { text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 700px) {
+  .memory-section .section-heading { flex-wrap: wrap; }
+  .memory-section .back-top { margin-left: auto; font-size: 12px; }
+  .memory-toolbar { gap: 14px; }
+  .memory-toolbar > p { width: 100%; flex-basis: 100%; }
+  .memory-workbench { padding: 17px 12px 23px; border-width: 5px; }
+  .memory-grid, .memory-grid-12 { grid-template-columns: repeat(4, minmax(0,1fr)); gap: 8px; }
+  .memory-scoreboard { gap: 13px; justify-content: space-between; font-size: 11px; }
+  .memory-scoreboard > span { gap: 4px; }
+  .memory-scoreboard > span > svg { width: 14px; }
+  .memory-actions { width: 100%; justify-content: flex-end; }
+  .memory-actions .icon-button { width: 34px; height: 34px; }
+  .memory-announcement { margin-block: 10px 16px; font-size: 12px; }
+  .memory-card-back { border-width: 2px; padding: 5px; }
+  .card-back-border { gap: 4px; }
+  .card-back-border > svg { width: 24px; height: 24px; }
+  .card-back-border > span { font-size: 15px; }
+  .memory-card-front { padding: 4px; }
+  .memory-card-front img { height: calc(100% - 18px); }
+  .pokemon-name { font-size: 9px; }
+  .memory-pause h3 { font-size: 25px; }
+  .memory-pause { gap: 13px; }
+  .memory-victory { text-align: center; gap: 12px; }
+  .memory-victory h3 { font-size: 27px; }
+}
 @keyframes ribbon-sway { 0%, 100% { rotate: -3deg; } 50% { rotate: 3deg; } }
 @keyframes compass-turn { to { rotate: 360deg; } }
 [data-motion='off'] *, [data-motion='off'] *::before, [data-motion='off'] *::after { animation-play-state: paused !important; transition-duration: 0s !important; }

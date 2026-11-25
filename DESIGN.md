@@ -9,6 +9,8 @@ colors:
   teal: "#246d68"
   red: "#a54137"
   gold: "#d3ab57"
+  admin-background: "#f4f6f4"
+  admin-ink: "#263e3a"
 typography:
   display:
     fontFamily: "Pirata One, serif"
@@ -19,6 +21,12 @@ typography:
   body:
     fontFamily: "Baloo, sans-serif"
     fontSize: "16px"
+    letterSpacing: "0"
+  admin-title:
+    fontFamily: "Baloo, sans-serif"
+    fontSize: "28px"
+    fontWeight: 700
+    lineHeight: 1.3
     letterSpacing: "0"
 rounded:
   control: "4px"
@@ -70,6 +78,10 @@ Os filtros usam botões com `aria-pressed`. As linhas abrem detalhes em um diál
 A entrada do pergaminho usa GSAP; fitas oscilam em ciclos de seis segundos. Motion controla a reorganização dos grupos, o destaque deslizante dos filtros, as transições do catálogo, a resposta dos bilhetes e a entrada/saída do diálogo. A duração padrão é 280ms, o filtro usa 250ms e a saída do diálogo usa 170ms. O foco permanece no diálogo nativo durante sua saída e retorna ao botão de origem ao fechar.
 
 O botão de pausa e `prefers-reduced-motion` desativam as transições de Motion e seus gestos espaciais. Cada elemento tem um único responsável por suas transformações: GSAP na abertura, Motion nos componentes React e Phaser no canvas. Phaser pausa fora da tela e limita a quantidade de peças.
+
+O jogo da memória é uma mesa em verde-petróleo com moldura de madeira, cartas de proporção 0,84 e imagens reais dos personagens. Motion controla a virada em 3D, com troca instantânea quando o movimento é reduzido. O nível de 12 pares usa seis colunas no desktop; abaixo de 700px todos os níveis usam quatro. A pausa da partida oculta as cartas e interrompe o tempo; ela é independente da pausa das animações decorativas.
+
+O painel `/admin` é uma superfície de operação: fundo neutro claro, Baloo para leitura e títulos compactos (28px), ações em verde-petróleo e listas tabulares. Usa navegação lateral, tabela e editor em colunas; abaixo de 850px a navegação passa ao topo e abaixo de 650px o editor passa para baixo da tabela. O painel não reproduz as animações decorativas do mural. Imagens têm prévia e ações de edição/exclusão usam ícones com nomes acessíveis.
 
 ## Do's and Don'ts
 

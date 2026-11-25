@@ -59,13 +59,14 @@ function ExtraModeTicket({ mode, canAnimate }: { mode: ExtraMode; canAnimate: bo
   );
 }
 
-export function ChallengeSections({ canAnimate }: { canAnimate: boolean }) {
+export function ChallengeSections({ canAnimate, onPlayMemory }: { canAnimate: boolean; onPlayMemory: () => void }) {
   const { data, error, loading, retry } = useGameCatalog();
   const [filter, setFilter] = useState<Filter>('all');
   const [selected, setSelected] = useState<Challenge>();
 
   function selectGame(game: Challenge) {
-    setSelected(game);
+    if (game.slug === 'memory-kids') onPlayMemory();
+    else setSelected(game);
   }
 
   return (
