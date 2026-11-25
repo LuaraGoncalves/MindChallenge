@@ -173,7 +173,7 @@ function MemoryBoard({ characters, canAnimate }: { characters: MemoryCharacter[]
             <button type="button" className="victory-account-choice local-back" onClick={() => setSaveMode('choose')}>Voltar às opções de salvamento</button>
             {submitError && <p className="ranking-error" role="alert">{submitError}</p>}
           </div>}
-          {!submitted && saveMode === 'account' && <form className="victory-score-form" onSubmit={submitScore}>
+          {!submitted && (saveMode === 'account' || saveMode === 'register') && <form className="victory-score-form" onSubmit={submitScore}>
             <label htmlFor="ranking-account">Nome da conta</label><input id="ranking-account" value={account} onChange={(event) => setAccount(event.target.value)} minLength={3} maxLength={30} pattern="[A-Za-z0-9_.-]+" required placeholder="3 a 30 letras ou números" />
             {!authenticated && <><label htmlFor="ranking-password">Senha</label><input id="ranking-password" type="password" value={password} onChange={(event) => setPassword(event.target.value)} minLength={12} maxLength={72} required autoComplete={saveMode === 'register' ? 'new-password' : 'current-password'} placeholder="Pelo menos 12 caracteres" /> </>}
             <div className="account-form-actions"><button className="ribbon-button" type="submit" disabled={submitting || authenticated}>{submitting ? 'Enviando…' : authenticated ? `Conectado como ${account}` : 'Entrar e salvar'}</button>
