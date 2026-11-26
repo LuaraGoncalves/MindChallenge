@@ -37,7 +37,7 @@ public class PlayerAccountController {
 		validate(credentials);
 		String username = credentials.username().trim();
 		if (accounts.existsByUsername(username)) throw new ResponseStatusException(HttpStatus.CONFLICT, "Esse nome já está em uso.");
-		accounts.save(new PlayerAccountEntity(username, "{bcrypt}" + encoder.encode(credentials.password())));
+		accounts.save(new PlayerAccountEntity(username, encoder.encode(credentials.password())));
 		return login(new Credentials(username, credentials.password()), request, response);
 	}
 

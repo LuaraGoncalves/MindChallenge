@@ -8,6 +8,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.http.HttpMethod;
@@ -20,7 +22,11 @@ import org.springframework.security.web.savedrequest.NullRequestCache;
 @Configuration
 public class SecurityConfig {
 	@Bean
-	PasswordEncoder passwordEncoder() { return new BCryptPasswordEncoder(12); }
+	PasswordEncoder passwordEncoder() {
+		DelegatingPasswordEncoder encoder = (DelegatingPasswordEncoder) PasswordEncoderFactories.createDelegatingPasswordEncoder();
+		encoder.setDefaultPasswordEncoderForMatches(new BCryptPasswordEncoder(12));
+		return encoder;
+	}
 	@Bean
 	AuthenticationManager authenticationManager(UserDetailsService users, PasswordEncoder encoder) {
 		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
