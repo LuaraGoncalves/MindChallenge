@@ -39,7 +39,7 @@ svg { flex-shrink: 0; }
 .skip-link:focus { top: 16px; }
 .board-header { position: relative; }
 .topbar { width: min(1240px, calc(100% - 64px)); margin: auto; padding: 20px 0; display: flex; align-items: center; gap: 28px; border-bottom: 1px solid #c6a47f40; }
-.brand-mark { display: inline-flex; align-items: center; gap: 10px; font-family: 'Pirata One', serif; font-size: 25px; white-space: nowrap; color: #f5deb3; }
+.brand-mark { display: inline-flex; align-items: center; gap: 10px; flex-shrink: 0; font-family: 'Pirata One', serif; font-size: 25px; white-space: nowrap; color: #f5deb3; }
 .brand-mark svg { color: var(--gold); }
 .nav-links { display: flex; justify-content: center; gap: 32px; margin-left: auto; font-size: 15px; }
 .nav-links a { border-bottom: 2px solid transparent; transition: border-color .2s, color .2s; }
@@ -47,7 +47,7 @@ svg { flex-shrink: 0; }
 .icon-button { display: inline-grid; place-items: center; width: 40px; height: 40px; padding: 0; background: transparent; border: 1px solid #b58b625e; border-radius: 4px; color: inherit; transition: background .2s; }
 .icon-button:hover { background: #c6a47f26; }
 .motion-toggle { margin-left: 12px; color: #f8dfad; }
-.account-nav { min-height: 40px; padding: 7px 13px; color: #f8e6c2; background: #246d68; border: 1px solid #b99165; border-radius: 3px; font-weight: 700; white-space: nowrap; }
+.account-nav { min-height: 40px; padding: 7px 13px; color: #f8e6c2; background: #246d68; border: 1px solid #b99165; border-radius: 3px; font-weight: 700; white-space: nowrap; flex-shrink: 0; }
 .account-nav:hover { background: #195954; }
 .welcome-board { position: relative; max-width: 1000px; margin: 36px auto 0; padding: 0 70px; }
 .welcome-paper { position: relative; text-align: center; min-height: 390px; padding: 42px 55px 48px; color: var(--ink); background: url('/assets/parchment.png') center / 100% 100% no-repeat; filter: drop-shadow(3px 10px 7px #170b0866); }
@@ -303,6 +303,10 @@ h1 { font-family: 'Pirata One', serif; font-size: 80px; font-weight: 400; line-h
 @keyframes compass-turn { to { rotate: 360deg; } }
 [data-motion='off'] *, [data-motion='off'] *::before, [data-motion='off'] *::after { animation-play-state: paused !important; transition-duration: 0s !important; }
 @media (max-width: 900px) {
+  .topbar { width: calc(100% - 48px); flex-wrap: wrap; gap: 12px 18px; }
+  .nav-links { order: 3; width: 100%; justify-content: space-between; gap: 12px; margin-left: 0; padding-top: 7px; }
+  .motion-toggle { margin-left: auto; }
+  .account-nav { order: 2; }
   .page-width { width: calc(100% - 48px); }
   .welcome-board { padding-inline: 60px; }
   .welcome-paper { padding-inline: 32px; }
@@ -321,10 +325,10 @@ h1 { font-family: 'Pirata One', serif; font-size: 80px; font-weight: 400; line-h
 @media (max-width: 600px) {
   .page-width { width: calc(100% - 32px); }
   .topbar { width: calc(100% - 32px); gap: 8px; flex-wrap: wrap; padding-block: 14px; }
-  .brand-mark { font-size: 23px; }
+  .brand-mark { font-size: 21px; }
   .motion-toggle { margin-left: auto; }
   .account-nav { order: 2; min-height: 35px; padding: 5px 9px; font-size: 12px; }
-  .nav-links { order: 3; width: 100%; justify-content: space-between; gap: 12px; font-size: 13px; padding-top: 7px; }
+  .nav-links { font-size: 13px; }
   .welcome-board { margin-top: 22px; padding: 0 12px; }
   .welcome-paper { padding: 38px 27px 75px; min-height: 380px; }
   h1 { font-size: 47px; }
