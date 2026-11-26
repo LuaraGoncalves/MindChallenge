@@ -12,11 +12,12 @@ Interface web da plataforma MindChallenge, feita com React, TypeScript, Vite, Ta
 - A Mesa de experimentos apresenta prévias animadas com profundidade 3D e uma demonstração Phaser interativa; pode ser navegada arrastando com mouse/toque ou pelas setas. Os movimentos respeitam a opção de pausa e a preferência do sistema por movimento reduzido.
 - Vídeos reais ainda não acompanham o repositório. Para incluí-los, salve os clipes otimizados em `public/videos` e conecte os arquivos às demonstrações do carrossel.
 - Jogo da memória com personagens Pokémon, três dificuldades (6, 8 e 12 pares), tentativas, tempo, pausa, reinício e pontuação ao concluir.
+- Login e cadastro de jogador acessíveis pelo topo. Ao vencer, é possível enviar pontos ao ranking online autenticado ou guardar o resultado apenas no dispositivo.
 - Catálogo carregado da API pelos endpoints `/api/games/groups` e `/api/games/extras`.
 
 O acesso HTTP fica em `src/api/gameCatalog.ts`, e o hook `src/hooks/useGameCatalog.ts` gerencia o carregamento. O componente `MemoryGame` ainda é uma demonstração: não implementa partidas de memória nem envio de pontuações.
 
-O jogo real fica em `src/features/memory`: `memoryMachine.ts` usa XState para as regras de turnos, bloqueios e pausas, enquanto `MemoryChallenge.tsx` apresenta o tabuleiro com Motion e usa o embaralhamento do Phaser. Abra **Modo Kids > Jogo da memória** no mural para jogar. A pontuação é exibida ao final, sem envio ao ranking online.
+O jogo real fica em `src/features/memory`: `memoryMachine.ts` usa XState para as regras de turnos, bloqueios e pausas, enquanto `MemoryChallenge.tsx` apresenta o tabuleiro com Motion e usa o embaralhamento do Phaser. Abra **Modo Kids > Jogo da memória** no mural para jogar. A pontuação pode ser enviada ao ranking com uma conta ou salva no armazenamento local do navegador.
 
 `src/api/pokemon.ts` consulta a [PokéAPI](https://pokeapi.co/docs/v2) sem chave, guarda os dados públicos em cache e prepara as imagens antes de iniciar a partida. A primeira carga depende da conexão com a PokéAPI e o repositório de sprites; falhas exibem uma opção de tentar novamente. Não há chamadas à API ao virar cada carta. Pokémon e suas imagens pertencem aos respectivos titulares.
 

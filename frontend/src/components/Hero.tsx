@@ -1,8 +1,8 @@
 import { ArrowDown, Brain, Compass, Pause, Play, Sparkles } from 'lucide-react';
 
-type HeroProps = { motionEnabled: boolean; onToggleMotion: () => void };
+type HeroProps = { motionEnabled: boolean; onToggleMotion: () => void; accountName?: string; onAccount: () => void };
 
-export function Hero({ motionEnabled, onToggleMotion }: HeroProps) {
+export function Hero({ motionEnabled, onToggleMotion, accountName, onAccount }: HeroProps) {
   return (
     <header className="board-header" id="inicio">
       <nav className="topbar" aria-label="Navegação principal">
@@ -17,6 +17,7 @@ export function Hero({ motionEnabled, onToggleMotion }: HeroProps) {
           title={motionEnabled ? 'Pausar animações' : 'Ativar animações'} aria-pressed={!motionEnabled}>
           {motionEnabled ? <Pause size={18} /> : <Play size={18} />}
         </button>
+        <button className="account-nav" title={accountName ? `Sair da conta ${accountName}` : 'Entrar na conta'} onClick={onAccount}>{accountName ? 'Sair' : 'Entrar'}</button>
       </nav>
       <div className="welcome-board">
         <span className="hanging-ribbon ribbon-left" aria-hidden="true"><Sparkles size={27} /></span>
