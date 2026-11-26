@@ -1,4 +1,4 @@
-import { lazy, Suspense, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { Brain, MoveUp } from 'lucide-react';
@@ -7,6 +7,8 @@ import { ChallengeSections } from './components/ChallengeSections';
 import { Hero } from './components/Hero';
 import { ExperimentCarousel } from './components/ExperimentCarousel';
 import { useReducedMotionPreference } from './hooks/useReducedMotionPreference';
+import { rankingApi } from './api/ranking';
+import { PlayerAccountDialog } from './features/memory/PlayerAccountDialog';
 
 const MemoryChallenge = lazy(() => import('./features/memory/MemoryChallenge'));
 const AdminPanel = lazy(() => import('./features/admin/AdminPanel'));
@@ -16,9 +18,13 @@ function GameApp() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [motionEnabled, setMotionEnabled] = useState(true);
   const [memoryOpen, setMemoryOpen] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
+  const [accountName, setAccountName] = useState('');
   const returnFocusRef = useRef<HTMLElement | null>(null);
   const reducedMotion = useReducedMotionPreference();
   const canAnimate = motionEnabled && !reducedMotion;
+
+  useEffect(() => { rankingApi.me().then((account) => setAccountName(account.username)).catch(() => setAccountName('')); }, []);
 
   useGSAP(() => {
     if (!canAnimate) return;
@@ -33,7 +39,11 @@ function GameApp() {
       transition={{ duration: canAnimate ? 0.28 : 0, ease: [0.16, 1, 0.3, 1] }}>
     <div ref={containerRef} className="quest-app" data-motion={motionEnabled ? 'on' : 'off'}>
       <a className="skip-link" href="#desafios">Pular para os desafios</a>
-      <Hero motionEnabled={motionEnabled} onToggleMotion={() => setMotionEnabled(!motionEnabled)} />
+      <Hero motionEnabled={motionEnabled} accountName={accountName} onToggleMotion={() => setMotionEnabled(!motionEnabled)} onAccount={() => {
+        if (accountName) rankingApi.logout().then(() => setAccountName('')).catch(() => setAccountName(''));
+        else setAccountOpen(true);
+      }} />
+      {accountOpen && <PlayerAccountDialog onClose={() => setAccountOpen(false)} onLogin={setAccountName} />}
       <main>
         <ChallengeSections canAnimate={canAnimate} onPlayMemory={() => {
           returnFocusRef.current = document.activeElement as HTMLElement;

@@ -46,4 +46,5 @@ export const rankingApi = {
   me: () => request<{ username: string }>('/api/auth/me'),
   login: (username: string, password: string) => request<{ username: string }>('/api/auth/login', { method: 'POST', body: JSON.stringify({ username, password }) }),
   register: (username: string, password: string) => request<{ username: string }>('/api/auth/register', { method: 'POST', body: JSON.stringify({ username, password }) }),
+  logout: () => request<void>('/api/auth/logout', { method: 'POST' }),
 };

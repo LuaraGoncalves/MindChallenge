@@ -4,11 +4,11 @@ MindChallenge é um projeto de plataforma de jogos mentais com visual de tabulei
 
 ## Estado do projeto
 
-- Implementado: mural de desafios com filtros, jogo da memória com personagens da PokéAPI, catálogo fornecido pela API, demonstração interativa em Phaser, carrossel arrastável com prévias animadas em 3D na Mesa de experimentos e endpoints de ranking.
+- Implementado: mural de desafios com filtros, jogo da memória com personagens da PokéAPI, cadastro e login de jogadores, envio de resultados ao placar online ou salvamento local, demonstração interativa em Phaser e carrossel arrastável com prévias animadas na Mesa de experimentos.
 - A Mesa de experimentos reúne prévias animadas dos jogos e uma demonstração interativa em Phaser. Vídeos reais ainda não estão incluídos; podem ser adicionados depois como arquivos de mídia do frontend.
 - Painel administrativo em `/admin` para gerenciar temas e personagens, com login por sessão, upload de imagens e coleções próprias no jogo. Consulte o [guia de administração](docs/ADMIN.md) para configurar sua conta.
 - Preparado no código: persistência com JPA/Flyway, PostgreSQL no Docker Compose e workflow de validação no GitHub Actions.
-- Pendente: demais jogos, integração do placar com o frontend e validação de partidas para evitar pontuações inventadas.
+- Pendente: demais jogos e validação de partidas para evitar pontuações inventadas.
 - A configuração Docker ainda precisa ser validada com os três serviços funcionando juntos. A existência dos arquivos não comprova um deploy concluído.
 
 ## Requisitos

@@ -47,6 +47,8 @@ svg { flex-shrink: 0; }
 .icon-button { display: inline-grid; place-items: center; width: 40px; height: 40px; padding: 0; background: transparent; border: 1px solid #b58b625e; border-radius: 4px; color: inherit; transition: background .2s; }
 .icon-button:hover { background: #c6a47f26; }
 .motion-toggle { margin-left: 12px; color: #f8dfad; }
+.account-nav { min-height: 40px; padding: 7px 13px; color: #f8e6c2; background: #246d68; border: 1px solid #b99165; border-radius: 3px; font-weight: 700; white-space: nowrap; }
+.account-nav:hover { background: #195954; }
 .welcome-board { position: relative; max-width: 1000px; margin: 36px auto 0; padding: 0 70px; }
 .welcome-paper { position: relative; text-align: center; min-height: 390px; padding: 42px 55px 48px; color: var(--ink); background: url('/assets/parchment.png') center / 100% 100% no-repeat; filter: drop-shadow(3px 10px 7px #170b0866); }
 .title-ornament { display: flex; align-items: center; justify-content: center; gap: 18px; color: #9e713d; margin-bottom: 6px; }
@@ -204,6 +206,19 @@ h1 { font-family: 'Pirata One', serif; font-size: 80px; font-weight: 400; line-h
 .memory-pause { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; text-align: center; color: #f3dfba; }
 .memory-pause h3 { font-family: 'Pirata One', serif; font-size: 30px; font-weight: 400; }
 .victory-backdrop { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; overflow-y: auto; padding: 20px; background: #120e0de8; backdrop-filter: blur(7px); }
+.account-backdrop { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; overflow-y: auto; padding: 20px; background: #120e0de8; backdrop-filter: blur(7px); }
+.account-dialog { position: relative; width: min(440px,100%); padding: 38px; color: #493226; text-align: center; background: #f3dfba url('/assets/parchment.png') center / 100% 100%; border: 5px solid #93613e; outline: 2px solid #d3ab57; box-shadow: 0 18px 55px #000a; }
+.account-close { position: absolute; top: 12px; right: 12px; color: #493226; border-color: #93613e80; }
+.account-dialog-icon { display: grid; place-items: center; width: 58px; height: 58px; margin: 0 auto 12px; color: #fbe9bd; background: #246d68; border: 3px double #d3ab57; border-radius: 50%; }
+.account-dialog h2 { color: #493226; font: 400 32px/1.15 'Pirata One',serif; }
+.account-dialog > p { margin: 7px 0 20px; color: #755740; }
+.account-dialog form { display: grid; gap: 8px; text-align: left; }
+.account-dialog form label { color: #493226; font-size: 13px; font-weight: 700; }
+.account-dialog form input { min-height: 42px; padding: 8px 11px; color: #493226; background: #fff; border: 1px solid #93613e; border-radius: 3px; font: inherit; }
+.account-dialog form input:focus-visible { outline: 3px solid #246d68; outline-offset: 2px; }
+.account-dialog form .ribbon-button { margin-top: 8px; }
+.account-error { color: #8e332c; font-size: 13px; }
+.account-switch { margin-top: 15px; padding: 5px; color: #246d68; background: transparent; border: 0; font: inherit; text-decoration: underline; }
 .victory-modal { position: relative; width: min(510px,100%); max-height: calc(100dvh - 40px); overflow-y: auto; padding: 34px 38px 28px; text-align: center; color: #493226; background: #f3dfba url('/assets/parchment.png') center / 100% 100%; border: 5px solid #93613e; outline: 2px solid #d3ab57; box-shadow: 0 0 0 7px #1b1410aa, 0 22px 70px #000b; }
 .victory-modal::before { content: ''; position: absolute; inset: 7px; pointer-events: none; border: 1px solid #b99165; }
 .victory-close { position: absolute; top: 14px; right: 14px; z-index: 2; color: #493226; border-color: #93613e80; }
@@ -308,6 +323,7 @@ h1 { font-family: 'Pirata One', serif; font-size: 80px; font-weight: 400; line-h
   .topbar { width: calc(100% - 32px); gap: 8px; flex-wrap: wrap; padding-block: 14px; }
   .brand-mark { font-size: 23px; }
   .motion-toggle { margin-left: auto; }
+  .account-nav { order: 2; min-height: 35px; padding: 5px 9px; font-size: 12px; }
   .nav-links { order: 3; width: 100%; justify-content: space-between; gap: 12px; font-size: 13px; padding-top: 7px; }
   .welcome-board { margin-top: 22px; padding: 0 12px; }
   .welcome-paper { padding: 38px 27px 75px; min-height: 380px; }
